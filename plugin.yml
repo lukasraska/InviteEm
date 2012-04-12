@@ -1,0 +1,9 @@
+name: InviteEm
+main: darkknightcz.InviteEm.InviteEm
+version: 0.1
+commands:
+   inv: 
+      description: Invite player onto this server!
+      permissions: inviteem.inv
+      permissions-message: You do not have permissions!
+  

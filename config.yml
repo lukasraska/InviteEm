@@ -1,0 +1,10 @@
+settings:
+  database: 
+    host: localhost
+    username: username
+    password: password
+    database: minecraft
+  MaxInvitations: 5
+
+locale:
+  KickMessage: You have to be invited or registered to play on our server!
