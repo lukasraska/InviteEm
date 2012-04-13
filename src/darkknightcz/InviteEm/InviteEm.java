@@ -26,7 +26,7 @@ public class InviteEm extends JavaPlugin {
 	    PluginDescriptionFile pdfFile = getDescription();
 	    PluginManager pm = getServer().getPluginManager()
 	    		;
-	    log.info("["+pdfFile.getName()+"] Loading ...");
+	    log.info("["+pdfFile.getName()+"] Loading");
 	    /* methods */
 	    settings = new Settings(this);
 	    settings.load();	    
