@@ -47,7 +47,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/DarkKnightCZ/InviteEm.git</connection>
 		<developerConnection>scm:git:git@github.com:DarkKnightCZ/InviteEm.git</developerConnection>
-		<url>https://github.com/DarkKnightCZ/InviteEm</url>
+		<url>https://github.com/DarkKnightCZ/InviteEm/</url>
 	</scm>
 	<build>
 		<defaultGoal>clean install</defaultGoal>
