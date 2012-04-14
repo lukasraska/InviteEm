@@ -68,7 +68,7 @@ public class InviteEm extends JavaPlugin {
 	}
 
 	public boolean hasInvited(Player player){
-		return db.rewards.containsKey(player.getName());
+		return db.rewards.containsKey(player.getName().toLowerCase());
 	}
 	public Map<String, List<String>> getRewards(){
 		return db.rewards;

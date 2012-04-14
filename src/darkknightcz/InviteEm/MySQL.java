@@ -177,12 +177,12 @@ public class MySQL {
 				/* REWARD SYSTEM - temp add to map */
 
 				List<String> templist = new ArrayList<String>();
-				if (rewards.containsKey(sender)) {
-					templist.addAll(rewards.get(user));
-					rewards.remove(sender);
+				if (rewards.containsKey(sender.toLowerCase())) {
+					templist.addAll(rewards.get(user.toLowerCase()));
+					rewards.remove(sender.toLowerCase());
 				}
-				templist.add(user);
-				rewards.put(sender, templist);
+				templist.add(user.toLowerCase());
+				rewards.put(sender.toLowerCase(), templist);
 
 				
 				/* CLEANING */
@@ -276,14 +276,14 @@ public class MySQL {
 			ResultSet rs = pst.executeQuery();
 			List<String> templist = new ArrayList<String>();
 			while (rs.next()) {
-				String key = rs.getString("ref");
+				String key = rs.getString("ref").toLowerCase();
 				templist.clear();
-				if (rewards.containsKey(rs.getString("ref"))) {
+				if (rewards.containsKey(key)) {
 					templist.clear();
 					templist.addAll(rewards.get(key));
 					rewards.remove(key);
 				}
-				templist.add(rs.getString("nick"));
+				templist.add(rs.getString("nick").toLowerCase());
 				rewards.put(key, templist);
 			}
 		} catch (SQLException e) {
