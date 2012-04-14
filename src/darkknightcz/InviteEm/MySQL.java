@@ -158,7 +158,7 @@ public class MySQL {
 
 				/* INSERT INVITATION */
 				PreparedStatement pst = con
-						.prepareStatement("INSERT INTO `inviteem` (`id`, `nick`, `ref`, `url`, `ip`) VALUES (NULL, ?, ?, NULL, ?);");
+						.prepareStatement("INSERT INTO `inviteem` (`id`, `nick`, `ref`, `rewarded`, `url`, `ip`) VALUES (NULL, ?, ?,0, NULL, ?);");
 				pst.setString(1, user);
 				pst.setString(2, sender);
 				pst.setString(3,
@@ -174,6 +174,17 @@ public class MySQL {
 				pst.execute();
 				pst.close();
 
+				/* REWARD SYSTEM - temp add to map */
+
+				List<String> templist = new ArrayList<String>();
+				if (rewards.containsKey(sender)) {
+					templist.addAll(rewards.get(user));
+					rewards.remove(sender);
+				}
+				templist.add(user);
+				rewards.put(sender, templist);
+
+				
 				/* CLEANING */
 				disconnect(con);
 				Bukkit.getServer()
