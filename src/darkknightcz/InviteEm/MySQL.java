@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,6 +18,8 @@ public class MySQL {
 	private String username;
 	private String password;
 	private String database;
+
+	public Map<String, List<String>> rewards = new HashMap<String, List<String>>();
 
 	MySQL() throws SQLException {
 		this.host = Settings.host;
@@ -87,7 +93,7 @@ public class MySQL {
 		Connection con = this.connect();
 		/* invitation */
 		PreparedStatement pst = con
-				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem` (`id` INT NOT NULL AUTO_INCREMENT, `nick` VARCHAR(30) NOT NULL, `ref` VARCHAR(30) NOT NULL, `url` TEXT NULL, `ip` VARCHAR(40) NOT NULL, PRIMARY KEY (`id`), UNIQUE (`nick`)) ENGINE = InnoDB;");
+				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem` (`id` INT NOT NULL AUTO_INCREMENT, `nick` VARCHAR(30) NOT NULL, `ref` VARCHAR(30) NOT NULL, `rewarded` INT, `url` TEXT NULL, `ip` VARCHAR(40) NOT NULL, PRIMARY KEY (`id`), UNIQUE (`nick`)) ENGINE = InnoDB;");
 		pst.execute();
 		pst.close();
 
@@ -233,19 +239,44 @@ public class MySQL {
 		return false;
 	}
 
-	public int getOffset(String nick) throws Exception{
+	public int getOffset(String nick) throws Exception {
 		Connection con = this.connect();
-		PreparedStatement pst = con.prepareStatement("SELECT invitations_offset FROM `inviteem_users` WHERE nick=?");
+		PreparedStatement pst = con
+				.prepareStatement("SELECT invitations_offset FROM `inviteem_users` WHERE nick=?");
 		ResultSet rs = pst.executeQuery();
 		rs.next();
 		return rs.getInt("invitations_offset");
 	}
 
-	public void setOffset(String nick,int offset) throws SQLException {
+	public void setOffset(String nick, int offset) throws SQLException {
 		Connection con = this.connect();
-		PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_users` SET  `invitations_offset` = ? WHERE  `inviteem_users`.`nick` =?;");
+		PreparedStatement pst = con
+				.prepareStatement("UPDATE  `inviteem_users` SET  `invitations_offset` = ? WHERE  `inviteem_users`.`nick` =?;");
 		pst.setInt(1, offset);
 		pst.setString(2, nick);
 		pst.execute();
 	}
+
+	public void loadRewards() {
+		try {
+			Connection con = this.connect();
+			PreparedStatement pst = con
+					.prepareStatement("SELECT nick,ref FROM `inviteem` WHERE rewarded = 0 AND ref != 'facebook' ANDref != 'warforum'");
+			ResultSet rs = pst.executeQuery();
+			List<String> templist = new ArrayList<String>();
+			while (rs.next()) {
+				String key = rs.getString("ref");
+				templist.clear();
+				if (rewards.containsKey(rs.getString("ref"))) {
+					templist.clear();
+					templist.addAll(rewards.get(key));
+					rewards.remove(key);
+				}
+				templist.add(rs.getString("nick"));
+				rewards.put(key, templist);
+			}
+		} catch (SQLException e) {
+		}
+	}
+
 }

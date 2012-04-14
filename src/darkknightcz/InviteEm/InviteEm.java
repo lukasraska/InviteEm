@@ -1,5 +1,7 @@
 package darkknightcz.InviteEm;
 
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -44,7 +46,7 @@ public class InviteEm extends JavaPlugin {
 		}
 
 		db.loadIps();
-
+		db.loadRewards();
 		pm.registerEvents(new InviteEmPlayerListener(this, db), this);
 
 		PlayerCommands playerCommandsExecutor = new PlayerCommands(this, db);
@@ -65,11 +67,17 @@ public class InviteEm extends JavaPlugin {
 		return (economy != null);
 	}
 
-	public void tryRegisterMoney(Player player) {
+	public boolean hasInvited(Player player){
+		return db.rewards.containsKey(player.getName());
+	}
+	public Map<String, List<String>> getRewards(){
+		return db.rewards;
+	}
+	public void tryRegisterMoney(Player player,int type) {
 		this.getServer()
 				.getScheduler()
 				.scheduleSyncDelayedTask(this,
-						new RegisterMoney(this, player, 0), 1800L);
+						new RegisterMoney(this, player, type), 1800L);
 	}
 
 }

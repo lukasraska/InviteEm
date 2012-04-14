@@ -26,17 +26,23 @@ public class RegisterMoney implements Runnable {
 				player.sendMessage(ChatColor.GREEN
 						+ Settings.registerMoneyMessage.replaceAll(
 								"MONEY",
-								Settings.inviteMoney + " "
+								Settings.registerMoney + " "
 										+ plugin.economy.getName()));
 			} else {
-				plugin.economy.depositPlayer(player.getName(),
-						Settings.inviteMoney);
-				player.sendMessage(ChatColor.GREEN
-						+ Settings.inviteMoneyMessage.replaceAll(
-								"MONEY",
-								Settings.inviteMoney + " "
-										+ plugin.economy.getName()).replaceAll(
-								"PLAYER", player.getName()));
+				if (plugin.hasInvited(player)) {
+					for (String nick : plugin.getRewards().get(
+							player.getName().toLowerCase())) {
+						plugin.economy.depositPlayer(player.getName(),
+								Settings.inviteMoney);
+						player.sendMessage(ChatColor.GREEN
+								+ Settings.inviteMoneyMessage.replaceAll(
+										"MONEY",
+										Settings.inviteMoney + " "
+												+ plugin.economy.getName())
+										.replaceAll("PLAYER", nick));
+					}
+
+				}
 			}
 		}
 	}
