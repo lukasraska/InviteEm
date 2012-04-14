@@ -9,5 +9,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Lukáš/Desktop/eclipse/mysql-connector-java-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lukáš/Desktop/eclipse/Vault.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

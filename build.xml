@@ -5,8 +5,9 @@
 		<mkdir dir="bin/"/>
 		<get src="http://dl.bukkit.org/latest-rb/craftbukkit.jar" dest="lib/craftbukkit.jar"/>
 		<get src="http://dev.bukkit.org/media/files/583/841/AuthMe.jar" dest="lib/AuthMe.jar"/>
+		<get src="http://dev.bukkit.org/media/files/585/993/Vault.jar" dest="lib/Vault.jar"/>
 		<get src="http://dev.sysq.cz/mysql-connector-java-bin.jar" dest="lib/mysql.jar"/>
-		<javac srcdir="src/" destdir="bin/" classpath="lib/craftbukkit.jar;lib/AuthMe.jar;lib/mysql.jar" debug="true" debuglevel="lines,source" includeantruntime="false"/>
+		<javac srcdir="src/" destdir="bin/" classpath="lib/craftbukkit.jar;lib/AuthMe.jar;lib/mysql.jar;lib/Vault.jar" debug="true" debuglevel="lines,source" includeantruntime="false"/>
 		<jar destfile="InviteEm.jar" manifest="MANIFEST.MF">
 			<fileset dir="bin/"/>
 			<fileset file="plugin.yml"/>
