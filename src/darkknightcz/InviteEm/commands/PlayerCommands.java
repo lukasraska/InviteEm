@@ -20,7 +20,6 @@ public class PlayerCommands implements CommandExecutor{
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		System.out.println(sender);
 		if(sender instanceof Player){
 			if(cmd.getName().equalsIgnoreCase("inv")){
 				if(args.length==1){
@@ -31,7 +30,7 @@ public class PlayerCommands implements CommandExecutor{
 						return true;
 					}
 				}else{
-					sender.sendMessage("Usage: /inv nick  | /inv url");
+					sender.sendMessage(ChatColor.BLUE+"Usage: /inv [nick]  | /inv url");
 					return true;
 				}
 			}

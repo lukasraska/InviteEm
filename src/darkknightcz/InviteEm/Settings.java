@@ -27,6 +27,10 @@ public class Settings extends YamlConfiguration {
 	public static String somethingWentWrong;
 	public static String youHaveToBePlayer;
 	public static String ipIsOnList;
+	public static String playerDoesNotExist;
+	public static String playerOffset;
+	public static String somethingWentWrongOffset;
+	public static String offsetChanged;
 
 	public final Plugin plugin;
 	public FileConfiguration configFile = null;
@@ -63,6 +67,15 @@ public class Settings extends YamlConfiguration {
 		ipIsOnList = configFile
 				.getString("locale.IpIsOnList",
 						"We are sorry, but new registrations from your IP address are banned!");
+		playerDoesNotExist = configFile.getString("locale.PlayerDoesNotExist",
+				"That player does not play on our server!");
+		playerOffset = configFile.getString("locale.PlayerOffset",
+				"Player PLAYER can invite OFFSET more players up to MAX!");
+		somethingWentWrong = configFile.getString("locale.SomethingWentWrong",
+				"Something went wrong and the offset couldn't be changed. Maybe that player does not play on this server!");		
+		offsetChanged = configFile.getString("locale.offsetChanged",
+				"Invitation offset for player PLAYER has been changed, it is now OFFSET. Player can invite up to MAX player!");
+		
 
 		MaxInvitations = configFile.getInt("settings.MaxInvitations");
 	}

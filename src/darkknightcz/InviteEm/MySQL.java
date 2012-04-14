@@ -216,7 +216,7 @@ public class MySQL {
 		try {
 			con = this.connect();
 			pst = con
-					.prepareStatement("SELECT invitations FROM `inviteem_users` WHERE nick =? LIMIT 1");
+					.prepareStatement("SELECT invitations FROM `inviteem_users` WHERE nick =?");
 			pst.setString(1, sender.toLowerCase());
 			rs = pst.executeQuery();
 			rs.next();
@@ -231,5 +231,21 @@ public class MySQL {
 			return false;
 		}
 		return false;
+	}
+
+	public int getOffset(String nick) throws Exception{
+		Connection con = this.connect();
+		PreparedStatement pst = con.prepareStatement("SELECT invitations_offset FROM `inviteem_users` WHERE nick=?");
+		ResultSet rs = pst.executeQuery();
+		rs.next();
+		return rs.getInt("invitations_offset");
+	}
+
+	public void setOffset(String nick,int offset) throws SQLException {
+		Connection con = this.connect();
+		PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_users` SET  `invitations_offset` = ? WHERE  `inviteem_users`.`nick` =?;");
+		pst.setInt(1, offset);
+		pst.setString(2, nick);
+		pst.execute();
 	}
 }
