@@ -43,22 +43,20 @@ public class MySQL {
 	public synchronized void disconnect(Connection con) throws SQLException {
 		con.close();
 	}
-	
-	
-	
-	public void loadIps(){
-		try{
+
+	public void loadIps() {
+		try {
 			Connection con = this.connect();
-			PreparedStatement pst = con.prepareStatement("SELECT ip FROM inviteem_deniedIps ORDER BY id ASC");
+			PreparedStatement pst = con
+					.prepareStatement("SELECT ip FROM inviteem_deniedIps ORDER BY id ASC");
 			ResultSet rs = pst.executeQuery();
-			while(rs.next()){
+			while (rs.next()) {
 				Settings.deniedIps.add(rs.getString("ip"));
-			}			
-		}catch(Exception e){
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public synchronized boolean isRegistered(String user) {
 		Connection con = null;
@@ -95,11 +93,10 @@ public class MySQL {
 
 		/* users */
 		PreparedStatement pst2 = con
-				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem_users` ( `id` int(11) NOT NULL AUTO_INCREMENT,  `nick` VARCHAR(30) NOT NULL,  `invitations` int(11) NOT NULL,  PRIMARY KEY (`id`),  UNIQUE KEY `nick` (`nick`)) ENGINE=InnoDB;");
+				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem_users` ( `id` int(11) NOT NULL AUTO_INCREMENT,  `nick` VARCHAR(30) NOT NULL,  `invitations` int(11) NOT NULL,  `invitations_offset` int(11) NOT NULL,  PRIMARY KEY (`id`),  UNIQUE KEY `nick` (`nick`)) ENGINE=InnoDB;");
 		pst2.execute();
 		pst2.close();
 
-		
 		/* denied Ips */
 		PreparedStatement pst3 = con
 				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem_deniedIps` ( `id` int(11) NOT NULL AUTO_INCREMENT,  `ip` VARCHAR(40) NOT NULL, PRIMARY KEY (`id`),  UNIQUE KEY `ip` (`ip`)) ENGINE=InnoDB;");
@@ -152,24 +149,25 @@ public class MySQL {
 
 			try {
 				Connection con = this.connect();
-				
+
 				/* INSERT INVITATION */
 				PreparedStatement pst = con
 						.prepareStatement("INSERT INTO `inviteem` (`id`, `nick`, `ref`, `url`, `ip`) VALUES (NULL, ?, ?, NULL, ?);");
 				pst.setString(1, user);
 				pst.setString(2, sender);
-				pst.setString(3, Bukkit.getServer().getPlayer(sender.toLowerCase())
-						.getAddress().getAddress().getHostAddress());
+				pst.setString(3,
+						Bukkit.getServer().getPlayer(sender.toLowerCase())
+								.getAddress().getAddress().getHostAddress());
 				pst.execute();
 				pst.close();
-				
+
 				/* UPDATE PLAYER STATUS */
-				pst = con.prepareStatement("UPDATE  `inviteem_users` SET  `invitations` =  `invitations`+1 WHERE  `inviteem_users`.`nick` =?;");
+				pst = con
+						.prepareStatement("UPDATE  `inviteem_users` SET  `invitations` =  `invitations`+1 WHERE  `inviteem_users`.`nick` =?;");
 				pst.setString(1, sender);
 				pst.execute();
 				pst.close();
-				
-				
+
 				/* CLEANING */
 				disconnect(con);
 				Bukkit.getServer()
@@ -196,24 +194,20 @@ public class MySQL {
 
 	}
 
-	public synchronized void createPlayerStructure(String sender){
-		try{
-		Connection con = this.connect();
-		/*PreparedStatement pst = con.prepareStatement("SELECT COUNT(id) FROM  `inviteem_users` WHERE  `nick` =? LIMIT 1");
-		pst.setString(1, sender);
-		ResultSet rs = pst.executeQuery();
-		rs.next();
-		if(rs.getInt(0)==0){*/
-		
-			PreparedStatement pst = con.prepareStatement("INSERT INTO `inviteem_users` (`id`, `nick`, `invitations`) VALUES (NULL, ?, '0');");
+	public synchronized void createPlayerStructure(String sender) {
+		try {
+			Connection con = this.connect();
+
+			PreparedStatement pst = con
+					.prepareStatement("INSERT INTO `inviteem_users` (`id`, `nick`, `invitations`, `invitations_offset`) VALUES (NULL, ?, '0', '0');");
 			pst.setString(1, sender.toLowerCase());
-			pst.execute();			
-		
-		}catch(Exception e){
+			pst.execute();
+
+		} catch (Exception e) {
 			return;
 		}
 	}
-	
+
 	private synchronized boolean canInvite(String sender) {
 		Connection con = null;
 		PreparedStatement pst = null;

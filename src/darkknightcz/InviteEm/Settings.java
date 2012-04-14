@@ -15,7 +15,7 @@ public class Settings extends YamlConfiguration {
 	public static String password;
 	public static String database;
 
-	public static Integer MaxInvitations; /* per user */
+	public static Integer MaxInvitations; /* default invitations per user */
 	public static List<String> deniedIps = new ArrayList<String>();
 
 	/* LOCALES */
