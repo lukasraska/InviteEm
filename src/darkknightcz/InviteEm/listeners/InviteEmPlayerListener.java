@@ -6,14 +6,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import darkknightcz.InviteEm.InviteEm;
 import darkknightcz.InviteEm.MySQL;
 import darkknightcz.InviteEm.Settings;
 
 public class InviteEmPlayerListener implements Listener {
 	private MySQL db;
+	private InviteEm plugin;
 
 	public InviteEmPlayerListener(JavaPlugin plugin, MySQL database) {
 		this.db = database;
+		this.plugin=(InviteEm) plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -22,7 +25,7 @@ public class InviteEmPlayerListener implements Listener {
 			return;
 		}
 		if(db.isRegistered(event.getPlayer().getName())){
-			this.db.createPlayerStructure(event.getPlayer().getName());			
+			this.db.createPlayerStructure(event.getPlayer().getName());				
 			return;
 		}		
 		if(Settings.isOnList(event.getAddress().getHostAddress())){
@@ -31,6 +34,7 @@ public class InviteEmPlayerListener implements Listener {
 		}
 		if(db.isInvited(event.getPlayer().getName())){
 			this.db.createPlayerStructure(event.getPlayer().getName());
+			plugin.tryRegisterMoney(event.getPlayer()); // only at invite
 			return;
 		}
 	
