@@ -35,15 +35,17 @@ public class RegisterMoney implements Runnable {
 						player.getName());
 				if (usernames != null) {
 					for (String nick : usernames) {
-						plugin.economy.depositPlayer(player.getName(),
-								Settings.inviteMoney);
-						plugin.setRewarded(nick);
-						player.sendMessage(ChatColor.GREEN
-								+ Settings.inviteMoneyMessage.replaceAll(
-										"MONEY",
-										Settings.inviteMoney + " "
-												+ plugin.economy.getName())
-										.replaceAll("PLAYER", nick));
+						if (plugin.getDb().isRegistered(nick)) {
+							plugin.economy.depositPlayer(player.getName(),
+									Settings.inviteMoney);
+							plugin.setRewarded(nick);
+							player.sendMessage(ChatColor.GREEN
+									+ Settings.inviteMoneyMessage.replaceAll(
+											"MONEY",
+											Settings.inviteMoney + " "
+													+ plugin.economy.getName())
+											.replaceAll("PLAYER", nick));
+						}
 					}
 				}
 
