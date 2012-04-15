@@ -1,7 +1,5 @@
 package darkknightcz.InviteEm;
 
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -13,8 +11,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import darkknightcz.InviteEm.commands.PlayerCommands;
-import darkknightcz.InviteEm.listeners.InviteEmPlayerListener;
 import darkknightcz.InviteEm.economy.RegisterMoney;
+import darkknightcz.InviteEm.listeners.InviteEmPlayerListener;
 
 public class InviteEm extends JavaPlugin {
 	private MySQL db;
@@ -36,6 +34,7 @@ public class InviteEm extends JavaPlugin {
 		settings = new Settings(this);
 		settings.load();
 		setupEconomy();
+
 		try {
 			db = new MySQL();
 		} catch (Exception e) {
@@ -46,7 +45,6 @@ public class InviteEm extends JavaPlugin {
 		}
 
 		db.loadIps();
-		db.loadRewards();
 		pm.registerEvents(new InviteEmPlayerListener(this, db), this);
 
 		PlayerCommands playerCommandsExecutor = new PlayerCommands(this, db);
@@ -67,17 +65,19 @@ public class InviteEm extends JavaPlugin {
 		return (economy != null);
 	}
 
-	public boolean hasInvited(Player player){
-		return db.rewards.containsKey(player.getName().toLowerCase());
-	}
-	public Map<String, List<String>> getRewards(){
-		return db.rewards;
-	}
-	public void tryRegisterMoney(Player player,int type) {
+	public void tryRegisterMoney(Player player, int type) {
 		this.getServer()
 				.getScheduler()
 				.scheduleSyncDelayedTask(this,
 						new RegisterMoney(this, player, type), 1800L);
+	}
+
+	public MySQL getDb() {
+		return db;
+	}
+
+	public void setRewarded(String nick) {
+		db.setRewarded(nick);
 	}
 
 }

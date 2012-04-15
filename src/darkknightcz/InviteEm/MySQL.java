@@ -6,9 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,8 +16,6 @@ public class MySQL {
 	private String username;
 	private String password;
 	private String database;
-
-	public Map<String, List<String>> rewards = new HashMap<String, List<String>>();
 
 	MySQL() throws SQLException {
 		this.host = Settings.host;
@@ -174,17 +170,6 @@ public class MySQL {
 				pst.execute();
 				pst.close();
 
-				/* REWARD SYSTEM - temp add to map */
-
-				List<String> templist = new ArrayList<String>();
-				if (rewards.containsKey(sender.toLowerCase())) {
-					templist.addAll(rewards.get(user.toLowerCase()));
-					rewards.remove(sender.toLowerCase());
-				}
-				templist.add(user.toLowerCase());
-				rewards.put(sender.toLowerCase(), templist);
-
-				
 				/* CLEANING */
 				disconnect(con);
 				Bukkit.getServer()
@@ -268,26 +253,34 @@ public class MySQL {
 		pst.execute();
 	}
 
-	public void loadRewards() {
+	public List<String> loadRewards(String nick) {
+		try {
+			List<String> list = new ArrayList<String>();
+			Connection con = this.connect();
+			PreparedStatement pst = con
+					.prepareStatement("SELECT nick FROM `inviteem` WHERE rewarded = 0 AND ref != 'facebook' AND ref != 'warforum' AND ref = ?");
+			pst.setString(1, nick);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				list.add(rs.getString("nick"));
+			}
+			return list;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+
+	public void setRewarded(String nick) {
 		try {
 			Connection con = this.connect();
 			PreparedStatement pst = con
-					.prepareStatement("SELECT nick,ref FROM `inviteem` WHERE rewarded = 0 AND ref != 'facebook' ANDref != 'warforum'");
-			ResultSet rs = pst.executeQuery();
-			List<String> templist = new ArrayList<String>();
-			while (rs.next()) {
-				String key = rs.getString("ref").toLowerCase();
-				templist.clear();
-				if (rewards.containsKey(key)) {
-					templist.clear();
-					templist.addAll(rewards.get(key));
-					rewards.remove(key);
-				}
-				templist.add(rs.getString("nick").toLowerCase());
-				rewards.put(key, templist);
-			}
+					.prepareStatement("UPDATE `inviteem` SET `rewarded` = 1 WHERE `nick`=?;");
+			pst.setString(1, nick);
+			pst.execute();
 		} catch (SQLException e) {
+
 		}
+
 	}
 
 }

@@ -1,5 +1,7 @@
 package darkknightcz.InviteEm.economy;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -29,11 +31,13 @@ public class RegisterMoney implements Runnable {
 								Settings.registerMoney + " "
 										+ plugin.economy.getName()));
 			} else {
-				if (plugin.hasInvited(player)) {
-					for (String nick : plugin.getRewards().get(
-							player.getName().toLowerCase())) {
+				List<String> usernames = plugin.getDb().loadRewards(
+						player.getName());
+				if (usernames != null) {
+					for (String nick : usernames) {
 						plugin.economy.depositPlayer(player.getName(),
 								Settings.inviteMoney);
+						plugin.setRewarded(nick);
 						player.sendMessage(ChatColor.GREEN
 								+ Settings.inviteMoneyMessage.replaceAll(
 										"MONEY",
@@ -41,8 +45,8 @@ public class RegisterMoney implements Runnable {
 												+ plugin.economy.getName())
 										.replaceAll("PLAYER", nick));
 					}
-
 				}
+
 			}
 		}
 	}

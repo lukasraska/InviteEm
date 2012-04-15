@@ -16,29 +16,31 @@ public class InviteEmPlayerListener implements Listener {
 
 	public InviteEmPlayerListener(JavaPlugin plugin, MySQL database) {
 		this.db = database;
-		this.plugin=(InviteEm) plugin;
+		this.plugin = (InviteEm) plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if ((event.getResult() != PlayerLoginEvent.Result.ALLOWED) || (event.getPlayer() == null)) {
+		if ((event.getResult() != PlayerLoginEvent.Result.ALLOWED)
+				|| (event.getPlayer() == null)) {
 			return;
 		}
-		if(db.isRegistered(event.getPlayer().getName())){
+		if (db.isRegistered(event.getPlayer().getName())) {
 			this.db.createPlayerStructure(event.getPlayer().getName());
-			plugin.tryRegisterMoney(event.getPlayer(),1);
-			return;
-		}		
-		if(Settings.isOnList(event.getAddress().getHostAddress())){
-			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, Settings.ipIsOnList);
+			plugin.tryRegisterMoney(event.getPlayer(), 1);
 			return;
 		}
-		if(db.isInvited(event.getPlayer().getName())){
+		if (Settings.isOnList(event.getAddress().getHostAddress())) {
+			event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
+					Settings.ipIsOnList);
+			return;
+		}
+		if (db.isInvited(event.getPlayer().getName())) {
 			this.db.createPlayerStructure(event.getPlayer().getName());
-			plugin.tryRegisterMoney(event.getPlayer(),0); // 0 at invite
+			plugin.tryRegisterMoney(event.getPlayer(), 0); // 0 at invite
 			return;
 		}
-	
+
 		event.disallow(PlayerLoginEvent.Result.KICK_OTHER, Settings.kickMessage);
 		return;
 	}
