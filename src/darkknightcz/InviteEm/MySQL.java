@@ -329,6 +329,8 @@ public class MySQL {
 				return ref;
 
 			} catch (SQLException e) {
+				e.printStackTrace();
+				
 				for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
 					if (op.isOnline()) {
 						op.getPlayer()
@@ -350,7 +352,7 @@ public class MySQL {
 						.prepareStatement("INSERT INTO `inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, NULL, ?, 0, 0);");
 				pst.setString(1, nick);
 				pst.setString(2, msg);
-				return pst.executeUpdate();
+				return pst.executeUpdate(); // THERE IS THE PROBLEM, IT HAS TO RETURN ROW ID
 
 			} catch (SQLException e) {
 				for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
