@@ -32,7 +32,6 @@ public class MySQL {
 				+ ":3306/" + this.database + "?autoReconnect=true&user="
 				+ this.username + "&password=" + this.password);
 	}
-
 	public synchronized Connection AuthMeConnect() throws SQLException {
 		return DriverManager.getConnection("jdbc:mysql://"
 				+ uk.org.whoami.authme.settings.Settings.getMySQLHost + ":"
@@ -384,7 +383,7 @@ public class MySQL {
 	public void setWarned(String banned_player) {
 		try{
 			Connection con = this.connect();
-			PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`banned_player` =?;");
+			PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`banned_nick` =?;");
 			pst.setString(1, banned_player);
 			pst.executeUpdate();
 			pst.close();

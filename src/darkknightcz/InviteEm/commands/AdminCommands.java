@@ -27,7 +27,7 @@ public class AdminCommands implements CommandExecutor {
 			String[] args) {
 		if (sender instanceof Player) {
 			if (((Player) sender).hasPermission("inviteem.admin.offset")) {
-				if (cmd.getName().equalsIgnoreCase("inv")) {
+				if (cmd.getName().equalsIgnoreCase("inva")) {
 					if (args[0].equalsIgnoreCase("offset")) {
 						if (args.length == 3) {
 							int offset = Integer.parseInt(args[2]);
@@ -70,7 +70,7 @@ public class AdminCommands implements CommandExecutor {
 							}
 						} else {
 							sender.sendMessage(ChatColor.BLUE
-									+ "Usage: /inv offset [player] (number)");
+									+ "Usage: /inva offset [player] (number)");
 							return true;
 						}
 					}else if(args[0].equalsIgnoreCase("warn")){
@@ -91,7 +91,7 @@ public class AdminCommands implements CommandExecutor {
 								return true;
 							}
 						}else{
-							sender.sendMessage(ChatColor.BLUE+"Usage: /inv warn [player] [reason]");
+							sender.sendMessage(ChatColor.BLUE+"Usage: /inva warn [player] [reason]");
 							return true;							
 						}
 						

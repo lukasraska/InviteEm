@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import darkknightcz.InviteEm.commands.AdminCommands;
 import darkknightcz.InviteEm.commands.PlayerCommands;
 import darkknightcz.InviteEm.economy.RegisterMoney;
 import darkknightcz.InviteEm.listeners.InviteEmBanListener;
@@ -49,9 +50,11 @@ public class InviteEm extends JavaPlugin {
 		pm.registerEvents(new InviteEmPlayerListener(this), this);
 		pm.registerEvents(new InviteEmBanListener(this), this);
 
-		PlayerCommands playerCommandsExecutor = new PlayerCommands(this, db);
+		PlayerCommands PlayerCommandsExecutor = new PlayerCommands(this, db);
+		AdminCommands AdminCommandsExecutor = new AdminCommands(this, db);
 
-		this.getCommand("inv").setExecutor(playerCommandsExecutor);
+		this.getCommand("inv").setExecutor(PlayerCommandsExecutor);
+		this.getCommand("inva").setExecutor(AdminCommandsExecutor);
 
 		log.info("[" + pdfFile.getName() + "] Loaded");
 	}
