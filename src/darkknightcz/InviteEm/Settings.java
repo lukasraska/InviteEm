@@ -103,7 +103,7 @@ public class Settings extends YamlConfiguration {
 				"You have been awarde MONEY for joining our server!");
 		rewardCanceled = configFile.getString("locale.RewardCanceled",
 				"Reward for player PLAYER has been canceled due to REASON!");
-		rewardCanceled = configFile.getString("locale.IPConflict",
+		ipConflict = configFile.getString("locale.IPConflict",
 				"same IP address");
 
 		MaxInvitations = configFile.getInt("settings.MaxInvitations");

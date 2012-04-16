@@ -1,6 +1,7 @@
 package darkknightcz.InviteEm.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public class InviteEmBanListener implements Listener {
 					String ref = db.warn(args[1].toLowerCase());
 					if (ref != null) {
 						if(Bukkit.getPlayer(ref).isOnline()){
-							punish(ref);
+							punish(ref, args[1]);
 						}
 					}
 				} else {
@@ -38,8 +39,9 @@ public class InviteEmBanListener implements Listener {
 		}
 	}
 
-	private void punish(String ref) {
-		/* TODO: PUNISH SYSTEM */		
+	private void punish(String ref, String banned_nick) {
+		/* TODO: PUNISH SYSTEM */	
+		Bukkit.getPlayer(ref).sendMessage(ChatColor.RED+"You have been punished for inviting banned player: "+banned_nick);
 	}
 	
 	

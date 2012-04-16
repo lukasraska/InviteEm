@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import darkknightcz.InviteEm.commands.PlayerCommands;
 import darkknightcz.InviteEm.economy.RegisterMoney;
+import darkknightcz.InviteEm.listeners.InviteEmBanListener;
 import darkknightcz.InviteEm.listeners.InviteEmPlayerListener;
 
 public class InviteEm extends JavaPlugin {
@@ -46,6 +47,7 @@ public class InviteEm extends JavaPlugin {
 
 		db.loadIps();
 		pm.registerEvents(new InviteEmPlayerListener(this), this);
+		pm.registerEvents(new InviteEmBanListener(this), this);
 
 		PlayerCommands playerCommandsExecutor = new PlayerCommands(this, db);
 
