@@ -45,7 +45,7 @@ public class InviteEm extends JavaPlugin {
 		}
 
 		db.loadIps();
-		pm.registerEvents(new InviteEmPlayerListener(this, db), this);
+		pm.registerEvents(new InviteEmPlayerListener(this), this);
 
 		PlayerCommands playerCommandsExecutor = new PlayerCommands(this, db);
 
@@ -79,5 +79,6 @@ public class InviteEm extends JavaPlugin {
 	public void setRewarded(String nick) {
 		db.setRewarded(nick);
 	}
+
 
 }

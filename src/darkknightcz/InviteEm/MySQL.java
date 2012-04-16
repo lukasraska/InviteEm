@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class MySQL {
@@ -95,16 +96,22 @@ public class MySQL {
 		pst.close();
 
 		/* users */
-		PreparedStatement pst2 = con
+		pst = con
 				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem_users` ( `id` int(11) NOT NULL AUTO_INCREMENT,  `nick` VARCHAR(30) NOT NULL,  `invitations` int(11) NOT NULL,  `invitations_offset` int(11) NOT NULL,  PRIMARY KEY (`id`),  UNIQUE KEY `nick` (`nick`)) ENGINE=InnoDB;");
-		pst2.execute();
-		pst2.close();
+		pst.execute();
+		pst.close();
+
+		/* warnings */
+		pst = con
+				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem_warnings` (`id` INT NOT NULL AUTO_INCREMENT, `nick` VARCHAR(30) NOT NULL, `banned_nick` VARCHAR(30) NULL, `message` VARCHAR(255) NULL, `for_ops` SMALLINT(1) NOT NULL DEFAULT '0', `received` SMALLINT(1) NOT NULL DEFAULT '0', PRIMARY KEY (`id`), UNIQUE (`banned_nick`)) ENGINE = InnoDB;");
+		pst.execute();
+		pst.close();
 
 		/* denied Ips */
-		PreparedStatement pst3 = con
+		pst = con
 				.prepareStatement("CREATE TABLE IF NOT EXISTS `inviteem_deniedIps` ( `id` int(11) NOT NULL AUTO_INCREMENT,  `ip` VARCHAR(40) NOT NULL, PRIMARY KEY (`id`),  UNIQUE KEY `ip` (`ip`)) ENGINE=InnoDB;");
-		pst3.execute();
-		pst3.close();
+		pst.execute();
+		pst.close();
 
 		disconnect(con);
 	}
@@ -266,7 +273,10 @@ public class MySQL {
 				if (rs.getString("ip").equals(
 						player.getAddress().getAddress().getHostAddress())) {
 					this.setRewarded(rs.getString("nick"));
-					player.sendMessage(ChatColor.RED+Settings.rewardCanceled.replaceAll("PLAYER", rs.getString("nick")).replaceAll("REASON", Settings.ipConflict));
+					player.sendMessage(ChatColor.RED
+							+ Settings.rewardCanceled.replaceAll("PLAYER",
+									rs.getString("nick")).replaceAll("REASON",
+									Settings.ipConflict));
 				} else {
 					list.add(rs.getString("nick"));
 				}
@@ -288,6 +298,49 @@ public class MySQL {
 
 		}
 
+	}
+
+	public String getInviter(String nick) {
+		try {
+			Connection con = this.connect();
+			PreparedStatement pst = con
+					.prepareStatement("SELECT ref FROM `inviteem` WHERE `nick` =?");
+			pst.setString(1, nick);
+			ResultSet rs = pst.executeQuery();
+			rs.next();
+			return rs.getString("ref");
+		} catch (SQLException e) {
+			return "";
+		}
+	}
+
+	public String warn(String nick) {
+		String ref = getInviter(nick);
+		if (ref != null) {
+			try {
+				Connection con = this.connect();
+				PreparedStatement pst = con
+						.prepareStatement("INSERT INTO `minecraft`.`inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, ?, NULL, ?, 0);");
+				pst.setString(1, ref);
+				pst.setString(2, nick);
+				pst.setInt(3, (Settings.banOverride.contains(ref) ? 1 : 0)); // ban
+																				// override
+
+				return ref;
+
+			} catch (SQLException e) {
+				for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
+					if (op.isOnline()) {
+						op.getPlayer()
+								.sendMessage(
+										ChatColor.RED
+												+ "[InviteEm] Something happened, player is already banned or there is error in database!");
+					}
+				}
+			}
+		}
+
+		return "";
 	}
 
 }

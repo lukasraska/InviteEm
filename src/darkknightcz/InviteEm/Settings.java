@@ -20,6 +20,8 @@ public class Settings extends YamlConfiguration {
 
 	public static Integer inviteMoney;
 	public static Integer registerMoney;
+	
+	public static List<String> banOverride;
 
 	/* LOCALES */
 	public static String kickMessage;
@@ -60,6 +62,10 @@ public class Settings extends YamlConfiguration {
 
 		inviteMoney = configFile.getInt("economy.InviteMoney");
 		registerMoney = configFile.getInt("economy.RegisterMoney");
+		
+		
+		banOverride = configFile.getStringList("ban.override");
+		
 
 		kickMessage = configFile.getString("locale.KickMessage",
 				"You are not invited nor registered!");

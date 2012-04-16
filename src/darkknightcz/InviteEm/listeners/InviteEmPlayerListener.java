@@ -4,7 +4,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import darkknightcz.InviteEm.InviteEm;
 import darkknightcz.InviteEm.MySQL;
@@ -14,9 +13,9 @@ public class InviteEmPlayerListener implements Listener {
 	private MySQL db;
 	private InviteEm plugin;
 
-	public InviteEmPlayerListener(JavaPlugin plugin, MySQL database) {
-		this.db = database;
-		this.plugin = (InviteEm) plugin;
+	public InviteEmPlayerListener(InviteEm plugin) {
+		this.plugin = plugin;
+		this.db = plugin.getDb();
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
