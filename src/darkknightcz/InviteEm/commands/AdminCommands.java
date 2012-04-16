@@ -26,7 +26,6 @@ public class AdminCommands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		if (sender instanceof Player) {
-			if (((Player) sender).hasPermission("inviteem.admin.offset")) {
 				if (cmd.getName().equalsIgnoreCase("inva")) {
 					if (args[0].equalsIgnoreCase("offset")) {
 						if (args.length == 3) {
@@ -97,7 +96,7 @@ public class AdminCommands implements CommandExecutor {
 						
 					}
 				}
-			}
+			
 
 		} else {
 			sender.sendMessage(ChatColor.RED + Settings.youHaveToBePlayer);

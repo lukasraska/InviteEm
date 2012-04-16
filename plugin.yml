@@ -6,6 +6,10 @@ commands:
       description: Invite player onto this server!
       permissions: inviteem.inv
       permissions-message: You do not have permissions!
+   inva: 
+      description: Invite player onto this server!
+      permissions: inviteem.admin
+      permissions-message: You do not have permissions!
       
 softdepend: [Vault]           
   
