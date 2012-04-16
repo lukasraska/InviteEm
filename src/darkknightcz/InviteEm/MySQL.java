@@ -266,7 +266,7 @@ public class MySQL {
 			List<String> list = new ArrayList<String>();
 			Connection con = this.connect();
 			PreparedStatement pst = con
-					.prepareStatement("SELECT nick,ip FROM `inviteem` WHERE rewarded = 0 AND ref != 'facebook' AND ref != 'warforum' AND ref = ?");
+					.prepareStatement("SELECT nick,ip FROM `inviteem` WHERE rewarded = 0 AND ref = ?");
 			pst.setString(1, player.getName().toLowerCase());
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
