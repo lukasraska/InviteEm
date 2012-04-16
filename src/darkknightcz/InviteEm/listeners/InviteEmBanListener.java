@@ -26,10 +26,10 @@ public class InviteEmBanListener implements Listener {
 			String[] args = event.getMessage().split(" ");
 			if (args.length > 1) {
 				if (args[0].toLowerCase().equals("/ban")) {
-					String ref = db.warn(args[1].toLowerCase());
+					String ref = db.warnBan(args[1].toLowerCase());
 					if (ref != null) {
 						if(Bukkit.getPlayer(ref).isOnline()){
-							punish(ref, args[1]);
+							this.punish(ref, args[1]);
 						}
 					}
 				} else {
@@ -41,6 +41,7 @@ public class InviteEmBanListener implements Listener {
 
 	private void punish(String ref, String banned_nick) {
 		/* TODO: PUNISH SYSTEM */	
+		db.setWarned(ref);
 		Bukkit.getPlayer(ref).sendMessage(ChatColor.RED+"You have been punished for inviting banned player: "+banned_nick);
 	}
 	

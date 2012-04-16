@@ -314,18 +314,19 @@ public class MySQL {
 		}
 	}
 
-	public String warn(String nick) {
+	public String warnBan(String nick) {
 		String ref = getInviter(nick);
 		if (ref != null) {
 			try {
 				Connection con = this.connect();
 				PreparedStatement pst = con
-						.prepareStatement("INSERT INTO `minecraft`.`inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, ?, NULL, ?, 0);");
+						.prepareStatement("INSERT INTO `inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, ?, NULL, ?, 0);");
 				pst.setString(1, ref);
 				pst.setString(2, nick);
 				pst.setInt(3, (Settings.banOverride.contains(ref) ? 1 : 0)); // ban
 																				// override
-
+				pst.executeQuery();
+				
 				return ref;
 
 			} catch (SQLException e) {
@@ -334,13 +335,64 @@ public class MySQL {
 						op.getPlayer()
 								.sendMessage(
 										ChatColor.RED
-												+ "[InviteEm] Something happened, player is already banned or there is error in database!");
+												+ "[InviteEm] Something happened, player is already banned or there is error in the database!");
 					}
 				}
 			}
 		}
 
 		return "";
+	}
+	
+	public int warnAdmin(String nick,String msg) {		
+			try {
+				Connection con = this.connect();
+				PreparedStatement pst = con
+						.prepareStatement("INSERT INTO `inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, NULL, ?, 0, 0);");
+				pst.setString(1, nick);
+				pst.setString(2, msg);
+				return pst.executeUpdate();
+
+			} catch (SQLException e) {
+				for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
+					if (op.isOnline()) {
+						op.getPlayer()
+								.sendMessage(
+										ChatColor.RED
+												+ "[InviteEm] Something happened, there is probably error in the database!");
+					}
+				}
+			}		
+
+			return 0;
+	}
+
+	public void setWarned(int id) {
+		try{
+			Connection con = this.connect();
+			PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`id` =?;");
+			pst.setInt(1, id);
+			pst.executeUpdate();
+			pst.close();
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void setWarned(String banned_player) {
+		try{
+			Connection con = this.connect();
+			PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`banned_player` =?;");
+			pst.setString(1, banned_player);
+			pst.executeUpdate();
+			pst.close();
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
 	}
 
 }

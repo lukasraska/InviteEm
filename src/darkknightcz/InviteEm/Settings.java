@@ -39,6 +39,7 @@ public class Settings extends YamlConfiguration {
 	public static String registerMoneyMessage;
 	public static String inviteMoneyMessage;
 	public static String rewardCanceled;
+	public static String youHaveBeenWarned;
 
 	public static String ipConflict;
 
@@ -105,6 +106,9 @@ public class Settings extends YamlConfiguration {
 				"Reward for player PLAYER has been canceled due to REASON!");
 		ipConflict = configFile.getString("locale.IPConflict",
 				"same IP address");
+
+		youHaveBeenWarned = configFile.getString("locale.YouHaveBeenWarned",
+				"You have been warned for REASON");
 
 		MaxInvitations = configFile.getInt("settings.MaxInvitations");
 	}

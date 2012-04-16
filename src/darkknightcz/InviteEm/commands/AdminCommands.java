@@ -2,6 +2,7 @@ package darkknightcz.InviteEm.commands;
 
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -72,6 +73,28 @@ public class AdminCommands implements CommandExecutor {
 									+ "Usage: /inv offset [player] (number)");
 							return true;
 						}
+					}else if(args[0].equalsIgnoreCase("warn")){
+						if(args.length>2){
+							String player = args[1].toLowerCase();
+							StringBuilder sb = new StringBuilder();
+							for(int i=2;i<args.length;i++){
+								sb.append(args[i]);
+							}
+							String msg = sb.toString();
+							
+							int id=db.warnAdmin(player, msg);
+							Player pl = Bukkit.getPlayer(player);
+							if(pl.isOnline()){
+								pl.sendMessage(ChatColor.RED+Settings.youHaveBeenWarned.replaceAll("REASON",msg));
+								System.out.println("Vracene ID = "+id);
+								db.setWarned(id);
+								return true;
+							}
+						}else{
+							sender.sendMessage(ChatColor.BLUE+"Usage: /inv warn [player] [reason]");
+							return true;							
+						}
+						
 					}
 				}
 			}
