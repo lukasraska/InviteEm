@@ -17,11 +17,9 @@ public class Settings extends YamlConfiguration {
 
 	public static Integer MaxInvitations; /* default invitations per user */
 	public static List<String> deniedIps = new ArrayList<String>();
-	
-	
+
 	public static Integer inviteMoney;
 	public static Integer registerMoney;
-	
 
 	/* LOCALES */
 	public static String kickMessage;
@@ -38,6 +36,9 @@ public class Settings extends YamlConfiguration {
 	public static String offsetChanged;
 	public static String registerMoneyMessage;
 	public static String inviteMoneyMessage;
+	public static String rewardCanceled;
+
+	public static String ipConflict;
 
 	public final Plugin plugin;
 	public FileConfiguration configFile = null;
@@ -57,11 +58,9 @@ public class Settings extends YamlConfiguration {
 		database = configFile.getString("settings.database.database",
 				"minecraft");
 
-
 		inviteMoney = configFile.getInt("economy.InviteMoney");
 		registerMoney = configFile.getInt("economy.RegisterMoney");
 
-		
 		kickMessage = configFile.getString("locale.KickMessage",
 				"You are not invited nor registered!");
 		cannotInvite = configFile.getString("locale.CannotInvite",
@@ -83,16 +82,23 @@ public class Settings extends YamlConfiguration {
 				"That player does not play on our server!");
 		playerOffset = configFile.getString("locale.PlayerOffset",
 				"Player PLAYER can invite OFFSET more players up to MAX!");
-		somethingWentWrong = configFile.getString("locale.SomethingWentWrong",
-				"Something went wrong and the offset couldn't be changed. Maybe that player does not play on this server!");		
-		offsetChanged = configFile.getString("locale.offsetChanged",
-				"Invitation offset for player PLAYER has been changed, it is now OFFSET. Player can invite up to MAX player!");
-		
+		somethingWentWrong = configFile
+				.getString(
+						"locale.SomethingWentWrong",
+						"Something went wrong and the offset couldn't be changed. Maybe that player does not play on this server!");
+		offsetChanged = configFile
+				.getString(
+						"locale.offsetChanged",
+						"Invitation offset for player PLAYER has been changed, it is now OFFSET. Player can invite up to MAX player!");
+
 		inviteMoneyMessage = configFile.getString("locale.InviteMoney",
 				"You have been awarded MONEY for inviting player PLAYER!");
 		registerMoneyMessage = configFile.getString("locale.RegisterMoney",
 				"You have been awarde MONEY for joining our server!");
-		
+		rewardCanceled = configFile.getString("locale.RewardCanceled",
+				"Reward for player PLAYER has been canceled due to REASON!");
+		rewardCanceled = configFile.getString("locale.IPConflict",
+				"same IP address");
 
 		MaxInvitations = configFile.getInt("settings.MaxInvitations");
 	}

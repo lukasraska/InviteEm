@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 public class MySQL {
 	private String host;
@@ -253,16 +254,22 @@ public class MySQL {
 		pst.execute();
 	}
 
-	public List<String> loadRewards(String nick) {
+	public List<String> loadRewards(Player player) {
 		try {
 			List<String> list = new ArrayList<String>();
 			Connection con = this.connect();
 			PreparedStatement pst = con
-					.prepareStatement("SELECT nick FROM `inviteem` WHERE rewarded = 0 AND ref != 'facebook' AND ref != 'warforum' AND ref = ?");
-			pst.setString(1, nick);
+					.prepareStatement("SELECT nick,ip FROM `inviteem` WHERE rewarded = 0 AND ref != 'facebook' AND ref != 'warforum' AND ref = ?");
+			pst.setString(1, player.getName().toLowerCase());
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
-				list.add(rs.getString("nick"));
+				if (rs.getString("ip").equals(
+						player.getAddress().getAddress().getHostAddress())) {
+					this.setRewarded(rs.getString("nick"));
+					player.sendMessage(ChatColor.RED+Settings.rewardCanceled.replaceAll("PLAYER", rs.getString("nick")).replaceAll("REASON", Settings.ipConflict));
+				} else {
+					list.add(rs.getString("nick"));
+				}
 			}
 			return list;
 		} catch (SQLException e) {

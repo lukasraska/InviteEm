@@ -31,8 +31,7 @@ public class RegisterMoney implements Runnable {
 								Settings.registerMoney + " "
 										+ plugin.economy.getName()));
 			} else {
-				List<String> usernames = plugin.getDb().loadRewards(
-						player.getName());
+				List<String> usernames = plugin.getDb().loadRewards(player);
 				if (usernames != null) {
 					for (String nick : usernames) {
 						if (plugin.getDb().isRegistered(nick)) {
