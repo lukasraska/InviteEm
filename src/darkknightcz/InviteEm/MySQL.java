@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class MySQL {
 				+ ":3306/" + this.database + "?autoReconnect=true&user="
 				+ this.username + "&password=" + this.password);
 	}
+
 	public synchronized Connection AuthMeConnect() throws SQLException {
 		return DriverManager.getConnection("jdbc:mysql://"
 				+ uk.org.whoami.authme.settings.Settings.getMySQLHost + ":"
@@ -41,6 +43,25 @@ public class MySQL {
 				+ uk.org.whoami.authme.settings.Settings.getMySQLUsername
 				+ "&password="
 				+ uk.org.whoami.authme.settings.Settings.getMySQLPassword);
+	}
+
+	public String AuthMeRegisterIp(String nick) {
+		try {
+			Connection con = this.AuthMeConnect();
+			PreparedStatement pst = con.prepareStatement("SELECT "
+					+ uk.org.whoami.authme.settings.Settings.getMySQLColumnIp
+					+ " as ip FROM "
+					+ uk.org.whoami.authme.settings.Settings.getMySQLTablename
+					+ " WHERE "
+					+ uk.org.whoami.authme.settings.Settings.getMySQLColumnName
+					+ " = ? LIMIT 1");
+			pst.setString(1, nick);
+			ResultSet rs = pst.executeQuery();
+			rs.next();
+			return rs.getString("ip");
+		} catch (SQLException e) {
+			return null;
+		}
 	}
 
 	public synchronized void disconnect(Connection con) throws SQLException {
@@ -270,7 +291,7 @@ public class MySQL {
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				if (rs.getString("ip").equals(
-						player.getAddress().getAddress().getHostAddress())) {
+						this.AuthMeRegisterIp(rs.getString("nick")))) {
 					this.setRewarded(rs.getString("nick"));
 					player.sendMessage(ChatColor.RED
 							+ Settings.rewardCanceled.replaceAll("PLAYER",
@@ -309,7 +330,7 @@ public class MySQL {
 			rs.next();
 			return rs.getString("ref");
 		} catch (SQLException e) {
-			return "";
+			return null;
 		}
 	}
 
@@ -324,13 +345,13 @@ public class MySQL {
 				pst.setString(2, nick);
 				pst.setInt(3, (Settings.banOverride.contains(ref) ? 1 : 0)); // ban
 																				// override
-				pst.executeQuery();
-				
+				pst.executeUpdate();
+
 				return ref;
 
 			} catch (SQLException e) {
 				e.printStackTrace();
-				
+
 				for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
 					if (op.isOnline()) {
 						op.getPlayer()
@@ -342,58 +363,68 @@ public class MySQL {
 			}
 		}
 
-		return "";
+		return null;
 	}
-	
-	public int warnAdmin(String nick,String msg) {		
-			try {
-				Connection con = this.connect();
-				PreparedStatement pst = con
-						.prepareStatement("INSERT INTO `inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, NULL, ?, 0, 0);");
-				pst.setString(1, nick);
-				pst.setString(2, msg);
-				return pst.executeUpdate(); // THERE IS THE PROBLEM, IT HAS TO RETURN ROW ID
 
-			} catch (SQLException e) {
-				for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
-					if (op.isOnline()) {
-						op.getPlayer()
-								.sendMessage(
-										ChatColor.RED
-												+ "[InviteEm] Something happened, there is probably error in the database!");
-					}
+	public int warnAdmin(String nick, String msg) {
+		try {
+			Connection con = this.connect();
+			PreparedStatement pst = con
+					.prepareStatement("INSERT INTO `inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, NULL, ?, 0, 0);",Statement.RETURN_GENERATED_KEYS);
+			pst.setString(1, nick);
+			pst.setString(2, msg);		
+			pst.executeUpdate();
+			
+			ResultSet rs = pst.getGeneratedKeys();
+			rs.next();
+			int id = rs.getInt(1);
+			rs.close();
+			pst.close();
+			disconnect(con);
+			return id;
+			
+		} catch (SQLException e) {
+			for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
+				if (op.isOnline()) {
+					op.getPlayer()
+							.sendMessage(
+									ChatColor.RED
+											+ "[InviteEm] Something happened, there is probably error in the database!");
 				}
-			}		
+			}
+		}
 
-			return 0;
+		return 0;
 	}
 
 	public void setWarned(int id) {
-		try{
+		try {
 			Connection con = this.connect();
-			PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`id` =?;");
+			PreparedStatement pst = con
+					.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`id` =?;");
 			pst.setInt(1, id);
 			pst.executeUpdate();
 			pst.close();
-			
-		}catch(SQLException e){
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void setWarned(String banned_player) {
-		try{
+		try {
 			Connection con = this.connect();
-			PreparedStatement pst = con.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`banned_nick` =?;");
+			PreparedStatement pst = con
+					.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`banned_nick` =?;");
 			pst.setString(1, banned_player);
 			pst.executeUpdate();
 			pst.close();
-			
-		}catch(SQLException e){
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

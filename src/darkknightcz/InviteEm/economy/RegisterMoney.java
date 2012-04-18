@@ -29,7 +29,7 @@ public class RegisterMoney implements Runnable {
 						+ Settings.registerMoneyMessage.replaceAll(
 								"MONEY",
 								Settings.registerMoney + " "
-										+ plugin.economy.getName()));
+										+ plugin.economy.currencyNameSingular()));
 			} else {
 				List<String> usernames = plugin.getDb().loadRewards(player);
 				if (usernames != null) {
@@ -42,7 +42,7 @@ public class RegisterMoney implements Runnable {
 									+ Settings.inviteMoneyMessage.replaceAll(
 											"MONEY",
 											Settings.inviteMoney + " "
-													+ plugin.economy.getName())
+													+ plugin.economy.currencyNameSingular())
 											.replaceAll("PLAYER", nick));
 						}
 					}
