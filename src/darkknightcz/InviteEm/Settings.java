@@ -40,6 +40,8 @@ public class Settings extends YamlConfiguration {
 	public static String inviteMoneyMessage;
 	public static String rewardCanceled;
 	public static String youHaveBeenWarned;
+	public static String IpAddedOnList;
+	public static String IpNotAdded;
 
 	public static String ipConflict;
 
@@ -109,6 +111,12 @@ public class Settings extends YamlConfiguration {
 
 		youHaveBeenWarned = configFile.getString("locale.YouHaveBeenWarned",
 				"You have been warned for REASON");
+
+
+		IpAddedOnList = configFile.getString("locale.IpAddedOnList",
+				"IP has been added to the denied list!");
+		IpNotAdded = configFile.getString("locale.IpAddedOnList",
+				"IP has NOT been added to the denied list! There is probably same ip in the database!");
 
 		MaxInvitations = configFile.getInt("settings.MaxInvitations");
 	}

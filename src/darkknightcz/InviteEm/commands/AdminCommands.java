@@ -94,6 +94,16 @@ public class AdminCommands implements CommandExecutor {
 							return true;							
 						}
 						
+					}else if(args[0].equalsIgnoreCase("ip")){
+						if(args.length==2){
+							if(db.setIp(args[1])){
+								sender.sendMessage(ChatColor.GREEN+Settings.IpAddedOnList);
+							}else{
+								sender.sendMessage(ChatColor.RED+Settings.IpNotAdded);
+							}
+						}else{
+							sender.sendMessage(ChatColor.BLUE+"Usage: /inva ip [ip]");							
+						}
 					}
 				}
 			

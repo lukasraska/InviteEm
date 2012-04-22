@@ -5,6 +5,31 @@ settings:
     password: password
     database: minecraft
   MaxInvitations: 5
+  
+economy:
+  InviteMoney: 1000
+  RegisterMoney: 1000
+
+ban:
+  override: [FACEBOOK,WEB]
+
 
 locale:
   KickMessage: You have to be invited or registered to play on our server!
+  CannotInvite: You cannot invite another player!
+  AlreadyInvited: User USER is already registered!
+  SuccessfullyInvited: User USER has been successfully invited!
+  SomethingWentWrong: Something went wrong and the user hasn't been invited!
+  YouHaveToBePlayer: You have to be player in order to invite another player!
+  IpIsOnList: We are sorry, but new registrations from your IP address are banned!
+  PlayerDoesNotExist: That player does not play on our server!
+  PlayerOffset: Player PLAYER can invite OFFSET more player up to MAX!
+  SomethingWentWrongOffset: Something went wrong and the offset couldn't be changed!
+  OffsetChanged: Invitation offset for player PLAYER has been changed, it is now OFFSET. Player can invite up to MAX player!
+  InviteMoney: You have been awarded MONEY for inviting player PLAYER!
+  RegisterMoney: You have been awarded MONEY for joining our server!
+  RewardCanceled: Reward for player PLAYER has been canceled due to REASON!
+  IPConflict: same IP address
+  YouHaveBeenWarned: You have been warned for REASON 
+  IpAddedOnList: IP has been added to the denied list!
+  IpNotAdded: IP has NOT been added to the denied list! There is probably same ip in the database!

@@ -81,6 +81,20 @@ public class MySQL {
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean setIp(String ip){
+		try{
+			Connection con = this.connect();
+			PreparedStatement pst = con
+					.prepareStatement("INSERT INTO `inviteem_deniedIps` (`id`, `ip`) VALUES (NULL, ?);");
+			pst.setString(1, ip);
+			pst.execute();
+			Settings.deniedIps.add(ip);
+			return true;			
+		}catch(Exception e){
+			return false;
+		}
+	}
 
 	public synchronized boolean isRegistered(String user) {
 		Connection con = null;
@@ -151,7 +165,7 @@ public class MySQL {
 			pst.close();
 			disconnect(con);
 			return bool;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			return false;
 		}
 	}
