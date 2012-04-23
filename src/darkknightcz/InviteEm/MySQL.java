@@ -260,11 +260,11 @@ public class MySQL {
 		try {
 			con = this.connect();
 			pst = con
-					.prepareStatement("SELECT invitations FROM `inviteem_users` WHERE nick =?");
+					.prepareStatement("SELECT invitations,invitations_offset FROM `inviteem_users` WHERE nick =?");
 			pst.setString(1, sender.toLowerCase());
 			rs = pst.executeQuery();
 			rs.next();
-			Integer number = rs.getInt("invitations");
+			Integer number = rs.getInt("invitations")-rs.getInt("invitations_offset");
 			rs.close();
 			pst.close();
 			disconnect(con);
@@ -320,6 +320,25 @@ public class MySQL {
 			return null;
 		}
 	}
+	
+	public boolean tryReward(Player player){
+		try{
+			Connection con = this.connect();
+			PreparedStatement pst = con.prepareStatement("SELECT ip FROM `ìnviteem` WHERE nick = ?");
+			pst.setString(1, player.getName().toLowerCase());
+			ResultSet rs = pst.executeQuery();
+			rs.next();
+			if(player.getAddress().getAddress().getHostAddress().equals(rs.getString("ip"))){
+				return false;
+			}else{
+				return true;
+			}
+				
+		}catch(SQLException e){
+			return false;
+		}
+	}
+	
 
 	public void setRewarded(String nick) {
 		try {

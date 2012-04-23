@@ -23,13 +23,22 @@ public class RegisterMoney implements Runnable {
 	public void run() {
 		if (player.isOnline()) {
 			if (type == 0) {
-				plugin.economy.depositPlayer(player.getName(),
-						Settings.registerMoney);
-				player.sendMessage(ChatColor.GREEN
-						+ Settings.registerMoneyMessage.replaceAll(
-								"MONEY",
-								Settings.registerMoney + " "
-										+ plugin.economy.currencyNameSingular()));
+				if (plugin.getDb().tryReward(player)) {
+					plugin.economy.depositPlayer(player.getName(),
+							Settings.registerMoney);
+					player.sendMessage(ChatColor.GREEN
+							+ Settings.registerMoneyMessage.replaceAll(
+									"MONEY",
+									Settings.registerMoney
+											+ " "
+											+ plugin.economy
+													.currencyNamePlural()));
+				} else {
+					player.sendMessage(ChatColor.RED
+							+ Settings.rewardCanceled.replaceAll("PLAYER",
+									player.getName()).replaceAll("REASON",
+									Settings.ipConflict));
+				}
 			} else {
 				List<String> usernames = plugin.getDb().loadRewards(player);
 				if (usernames != null) {
@@ -39,10 +48,13 @@ public class RegisterMoney implements Runnable {
 									Settings.inviteMoney);
 							plugin.setRewarded(nick);
 							player.sendMessage(ChatColor.GREEN
-									+ Settings.inviteMoneyMessage.replaceAll(
-											"MONEY",
-											Settings.inviteMoney + " "
-													+ plugin.economy.currencyNameSingular())
+									+ Settings.inviteMoneyMessage
+											.replaceAll(
+													"MONEY",
+													Settings.inviteMoney
+															+ " "
+															+ plugin.economy
+																	.currencyNamePlural())
 											.replaceAll("PLAYER", nick));
 						}
 					}
