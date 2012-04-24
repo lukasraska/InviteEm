@@ -281,6 +281,7 @@ public class MySQL {
 		Connection con = this.connect();
 		PreparedStatement pst = con
 				.prepareStatement("SELECT invitations_offset FROM `inviteem_users` WHERE nick=?");
+		pst.setString(1,nick);
 		ResultSet rs = pst.executeQuery();
 		rs.next();
 		return rs.getInt("invitations_offset");
