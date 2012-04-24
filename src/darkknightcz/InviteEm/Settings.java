@@ -52,6 +52,7 @@ public class Settings extends YamlConfiguration {
 		this.plugin = plugin;
 		this.configFile = plugin.getConfig();
 		this.plugin.getConfig().options().copyDefaults(true);
+		this.plugin.saveConfig();
 	}
 
 	public void load() {

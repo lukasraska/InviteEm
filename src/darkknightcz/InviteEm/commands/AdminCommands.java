@@ -104,6 +104,8 @@ public class AdminCommands implements CommandExecutor {
 						}else{
 							sender.sendMessage(ChatColor.BLUE+"Usage: /inva ip [ip]");							
 						}
+					}else{
+						sender.sendMessage(ChatColor.BLUE+"Current use: /inva warn | /inva ip | /inva offset");
 					}
 				}
 			
