@@ -26,7 +26,8 @@ public class AdminCommands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		if (sender instanceof Player) {
-				if (cmd.getName().equalsIgnoreCase("inva")) {
+			if (cmd.getName().equalsIgnoreCase("inva")) {
+				if (args.length > 0) {
 					if (args[0].equalsIgnoreCase("offset")) {
 						if (args.length == 3) {
 							int offset = Integer.parseInt(args[2]);
@@ -72,43 +73,55 @@ public class AdminCommands implements CommandExecutor {
 									+ "Usage: /inva offset [player] (number)");
 							return true;
 						}
-					}else if(args[0].equalsIgnoreCase("warn")){
-						if(args.length>2){
+					} else if (args[0].equalsIgnoreCase("warn")) {
+						if (args.length > 2) {
 							String player = args[1].toLowerCase();
 							StringBuilder sb = new StringBuilder();
-							for(int i=2;i<args.length;i++){
-								sb.append(" "+args[i]);
+							for (int i = 2; i < args.length; i++) {
+								sb.append(" " + args[i]);
 							}
 							String msg = sb.toString();
-							
-							int id=db.warnAdmin(player, msg);
+
+							int id = db.warnAdmin(player, msg);
 							Player pl = Bukkit.getPlayer(player);
-							if(pl.isOnline()){
-								pl.sendMessage(ChatColor.RED+Settings.youHaveBeenWarned.replaceAll("REASON",msg));
-								System.out.println("Vracene ID = "+id);
+							if (pl.isOnline()) {
+								pl.sendMessage(ChatColor.RED
+										+ Settings.youHaveBeenWarned
+												.replaceAll("REASON", msg));
+								System.out.println("Vracene ID = " + id);
 								db.setWarned(id);
 								return true;
 							}
-						}else{
-							sender.sendMessage(ChatColor.BLUE+"Usage: /inva warn [player] [reason]");
-							return true;							
+						} else {
+							sender.sendMessage(ChatColor.BLUE
+									+ "Usage: /inva warn [player] [reason]");
+							return true;
 						}
-						
-					}else if(args[0].equalsIgnoreCase("ip")){
-						if(args.length==2){
-							if(db.setIp(args[1])){
-								sender.sendMessage(ChatColor.GREEN+Settings.IpAddedOnList);
-							}else{
-								sender.sendMessage(ChatColor.RED+Settings.IpNotAdded);
+
+					} else if (args[0].equalsIgnoreCase("ip")) {
+						if (args.length == 2) {
+							if (db.setIp(args[1])) {
+								sender.sendMessage(ChatColor.GREEN
+										+ Settings.IpAddedOnList);
+							} else {
+								sender.sendMessage(ChatColor.RED
+										+ Settings.IpNotAdded);
 							}
-						}else{
-							sender.sendMessage(ChatColor.BLUE+"Usage: /inva ip [ip]");							
+						} else {
+							sender.sendMessage(ChatColor.BLUE
+									+ "Usage: /inva ip [ip]");
 						}
-					}else{
-						sender.sendMessage(ChatColor.BLUE+"Current use: /inva warn | /inva ip | /inva offset");
+					} else {
+						sender.sendMessage(ChatColor.BLUE
+								+ "Current use: /inva warn | /inva ip | /inva offset");
+						return true;
 					}
+				} else {
+					sender.sendMessage(ChatColor.BLUE
+							+ "Current use: /inva warn | /inva ip | /inva offset");
+					return true;
 				}
-			
+			}
 
 		} else {
 			sender.sendMessage(ChatColor.RED + Settings.youHaveToBePlayer);
