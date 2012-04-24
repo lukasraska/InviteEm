@@ -77,7 +77,7 @@ public class AdminCommands implements CommandExecutor {
 							String player = args[1].toLowerCase();
 							StringBuilder sb = new StringBuilder();
 							for(int i=2;i<args.length;i++){
-								sb.append(args[i]);
+								sb.append(" "+args[i]);
 							}
 							String msg = sb.toString();
 							

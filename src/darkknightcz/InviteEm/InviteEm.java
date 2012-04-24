@@ -1,5 +1,6 @@
 package darkknightcz.InviteEm;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -57,6 +58,15 @@ public class InviteEm extends JavaPlugin {
 		this.getCommand("inva").setExecutor(AdminCommandsExecutor);
 
 		log.info("[" + pdfFile.getName() + "] Loaded");
+		
+		
+		try{
+			MetricsLite metrics = new MetricsLite(this);
+			metrics.start();
+		}catch(IOException e){
+			log.info("["+pdfFile.getName()+"] Metrics problem, just ignore");
+		}
+		
 	}
 
 	private boolean setupEconomy() {
