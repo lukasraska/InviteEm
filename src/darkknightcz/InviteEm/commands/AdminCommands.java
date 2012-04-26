@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -83,12 +84,12 @@ public class AdminCommands implements CommandExecutor {
 							String msg = sb.toString();
 
 							int id = db.warnAdmin(player, msg);
-							Player pl = Bukkit.getPlayer(player);
-							if (pl.isOnline()) {
+							OfflinePlayer plo = Bukkit.getOfflinePlayer(player);
+							if (plo.isOnline()) {
+								Player pl = plo.getPlayer();
 								pl.sendMessage(ChatColor.RED
 										+ Settings.youHaveBeenWarned
 												.replaceAll("REASON", msg));
-								System.out.println("Vracene ID = " + id);
 								db.setWarned(id);
 								return true;
 							}

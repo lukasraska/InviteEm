@@ -81,17 +81,17 @@ public class MySQL {
 			e.printStackTrace();
 		}
 	}
-	
-	public boolean setIp(String ip){
-		try{
+
+	public boolean setIp(String ip) {
+		try {
 			Connection con = this.connect();
 			PreparedStatement pst = con
 					.prepareStatement("INSERT INTO `inviteem_deniedIps` (`id`, `ip`) VALUES (NULL, ?);");
 			pst.setString(1, ip);
 			pst.execute();
 			Settings.deniedIps.add(ip);
-			return true;			
-		}catch(Exception e){
+			return true;
+		} catch (Exception e) {
 			return false;
 		}
 	}
@@ -264,7 +264,8 @@ public class MySQL {
 			pst.setString(1, sender.toLowerCase());
 			rs = pst.executeQuery();
 			rs.next();
-			Integer number = rs.getInt("invitations")-rs.getInt("invitations_offset");
+			Integer number = rs.getInt("invitations")
+					- rs.getInt("invitations_offset");
 			rs.close();
 			pst.close();
 			disconnect(con);
@@ -281,7 +282,7 @@ public class MySQL {
 		Connection con = this.connect();
 		PreparedStatement pst = con
 				.prepareStatement("SELECT invitations_offset FROM `inviteem_users` WHERE nick=?");
-		pst.setString(1,nick);
+		pst.setString(1, nick);
 		ResultSet rs = pst.executeQuery();
 		rs.next();
 		return rs.getInt("invitations_offset");
@@ -321,25 +322,26 @@ public class MySQL {
 			return null;
 		}
 	}
-	
-	public boolean tryReward(Player player){
-		try{
+
+	public boolean tryReward(Player player) {
+		try {
 			Connection con = this.connect();
-			PreparedStatement pst = con.prepareStatement("SELECT ip FROM `inviteem` WHERE nick = ?");
+			PreparedStatement pst = con
+					.prepareStatement("SELECT ip FROM `inviteem` WHERE nick = ?");
 			pst.setString(1, player.getName().toLowerCase());
 			ResultSet rs = pst.executeQuery();
 			rs.next();
-			if(player.getAddress().getAddress().getHostAddress().equals(rs.getString("ip"))){
+			if (player.getAddress().getAddress().getHostAddress()
+					.equals(rs.getString("ip"))) {
 				return false;
-			}else{
+			} else {
 				return true;
 			}
-				
-		}catch(SQLException e){
+
+		} catch (SQLException e) {
 			return false;
 		}
 	}
-	
 
 	public void setRewarded(String nick) {
 		try {
@@ -404,11 +406,13 @@ public class MySQL {
 		try {
 			Connection con = this.connect();
 			PreparedStatement pst = con
-					.prepareStatement("INSERT INTO `inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, NULL, ?, 0, 0);",Statement.RETURN_GENERATED_KEYS);
+					.prepareStatement(
+							"INSERT INTO `inviteem_warnings` (`id`, `nick`, `banned_nick`, `message`, `for_ops`, `received`) VALUES (NULL, ?, NULL, ?, 0, 0);",
+							Statement.RETURN_GENERATED_KEYS);
 			pst.setString(1, nick);
-			pst.setString(2, msg);		
+			pst.setString(2, msg);
 			pst.executeUpdate();
-			
+
 			ResultSet rs = pst.getGeneratedKeys();
 			rs.next();
 			int id = rs.getInt(1);
@@ -416,7 +420,7 @@ public class MySQL {
 			pst.close();
 			disconnect(con);
 			return id;
-			
+
 		} catch (SQLException e) {
 			for (OfflinePlayer op : Bukkit.getServer().getOperators()) {
 				if (op.isOnline()) {
@@ -441,7 +445,6 @@ public class MySQL {
 			pst.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
 	}
@@ -456,9 +459,39 @@ public class MySQL {
 			pst.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
+	}
+
+	public void setWarnedPlayer(String player) {
+		try {
+			Connection con = this.connect();
+			PreparedStatement pst = con
+					.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`nick` =?;");
+			pst.setString(1, player);
+			pst.executeUpdate();
+			pst.close();
+
+		} catch (SQLException e) {
+		}
+
+	}
+
+	public List<String> getWarnings(String nick) {
+		List<String> warns = new ArrayList<String>();
+		try {
+			Connection con = this.connect();
+			PreparedStatement pst = con
+					.prepareStatement("SELECT message FROM `inviteem_warnings` WHERE `received` = 0 AND `for_ops` = 0 AND nick = ?");
+			pst.setString(1, nick);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				warns.add(rs.getString("message"));
+			}
+			return warns;
+		} catch (SQLException e) {
+			return warns;
+		}
 	}
 
 }

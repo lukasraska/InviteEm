@@ -22,7 +22,7 @@ public class RegisterMoney implements Runnable {
 	@Override
 	public void run() {
 		if (player.isOnline()) {
-			if (type == 0) { //at invite
+			if (type == 0) { // at invite
 				if (plugin.getDb().tryReward(player)) {
 					plugin.economy.depositPlayer(player.getName(),
 							Settings.registerMoney);
@@ -40,6 +40,21 @@ public class RegisterMoney implements Runnable {
 									Settings.ipConflict));
 				}
 			} else {
+
+				/* HANDLING WARNING FOR OFFLINE PLAYER */
+				List<String> warnings = plugin.getDb().getWarnings(
+						player.getName().toLowerCase());
+				if (!warnings.isEmpty()) {
+					for (String warning : warnings) {
+						player.sendMessage(ChatColor.RED
+								+ Settings.youHaveBeenWarned.replaceAll(
+										"REASON", warning));
+					}
+					plugin.getDb().setWarnedPlayer(
+							player.getName().toLowerCase());
+				}
+
+				/* REWARD */
 				List<String> usernames = plugin.getDb().loadRewards(player);
 				if (usernames != null) {
 					for (String nick : usernames) {
