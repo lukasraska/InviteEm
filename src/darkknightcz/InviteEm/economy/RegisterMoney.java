@@ -22,7 +22,7 @@ public class RegisterMoney implements Runnable {
 	@Override
 	public void run() {
 		if (player.isOnline()) {
-			if (type == 0) {
+			if (type == 0) { //at invite
 				if (plugin.getDb().tryReward(player)) {
 					plugin.economy.depositPlayer(player.getName(),
 							Settings.registerMoney);

@@ -325,7 +325,7 @@ public class MySQL {
 	public boolean tryReward(Player player){
 		try{
 			Connection con = this.connect();
-			PreparedStatement pst = con.prepareStatement("SELECT ip FROM `ìnviteem` WHERE nick = ?");
+			PreparedStatement pst = con.prepareStatement("SELECT ip FROM `inviteem` WHERE nick = ?");
 			pst.setString(1, player.getName().toLowerCase());
 			ResultSet rs = pst.executeQuery();
 			rs.next();
