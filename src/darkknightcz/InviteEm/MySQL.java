@@ -467,7 +467,7 @@ public class MySQL {
 		try {
 			Connection con = this.connect();
 			PreparedStatement pst = con
-					.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE  `inviteem_warnings`.`nick` =?;");
+					.prepareStatement("UPDATE  `inviteem_warnings` SET  `received` = 1 WHERE `for_ops` = 0 AND `nick` =?;");
 			pst.setString(1, player);
 			pst.executeUpdate();
 			pst.close();
