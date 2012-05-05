@@ -61,7 +61,24 @@ public class InviteEm extends JavaPlugin {
 		
 		
 		try{
-			MetricsLite metrics = new MetricsLite(this);
+			Metrics metrics = new Metrics(this);
+			
+			/* total invitations */
+			metrics.addCustomData(new Metrics.Plotter("Invitations count") {
+			        @Override
+			        public int getValue() {
+			            return db.getInvitationsCount();
+			        }
+
+			});
+			/* total denied ips */
+			metrics.addCustomData(new Metrics.Plotter("Denied Ips count") {
+		        @Override
+		        public int getValue() {
+		            return db.getDeniedIpsCount();
+		        }
+			});
+			
 			metrics.start();
 		}catch(IOException e){
 			log.info("["+pdfFile.getName()+"] Metrics problem, just ignore");

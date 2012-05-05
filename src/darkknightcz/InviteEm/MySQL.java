@@ -150,6 +150,33 @@ public class MySQL {
 		disconnect(con);
 	}
 
+	/* statistic methods */
+	public int getInvitationsCount(){
+		try{
+			Connection con = this.connect();
+			PreparedStatement pst = con.prepareStatement("SELECT COUNT(id) FROM `inviteem`");
+			pst.execute();
+			ResultSet rs = pst.getResultSet();
+			rs.next();
+			return rs.getInt(0);
+		}catch(SQLException e){
+			return 0;
+		}
+	}
+	
+	public int getDeniedIpsCount(){
+		try{
+			Connection con = this.connect();
+			PreparedStatement pst = con.prepareStatement("SELECT COUNT(id) FROM `inviteem_deniedIps`");
+			pst.execute();
+			ResultSet rs = pst.getResultSet();
+			rs.next();
+			return rs.getInt(0);
+		}catch(SQLException e){
+			return 0;
+		}
+	}
+	
 	public synchronized boolean isInvited(String user) {
 		Connection con = null;
 		PreparedStatement pst = null;
