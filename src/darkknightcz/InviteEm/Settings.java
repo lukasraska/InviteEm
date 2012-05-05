@@ -163,6 +163,7 @@ public class Settings extends YamlConfiguration {
 		youHaveBeenWarned = configFile.getString("punishments.locale.YouHaveBeenWarned",
 				"You have been warned for REASON");
 		banReason = configFile.getString("punishments.BanReason","inviting banned player PLAYER");
+		warnReason = configFile.getString("punishments.WarnReason","inviting banned player PLAYER");
 		banOnWarnReason = configFile.getString("punishments.BanOnWarnReason","exceeding warnings limit");
 		tempBanOnWarnReason = configFile.getString("punishments.TempBanOnWarn","exceeding warnings limit");
 
