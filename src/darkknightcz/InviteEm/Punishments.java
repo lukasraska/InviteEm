@@ -25,6 +25,7 @@ public class Punishments {
 			}
 			plugin.getDb().setWarnedPlayer(
 					player.getName().toLowerCase());
+			punishWarn(player.getName().toLowerCase());
 		}				
 	}
 	

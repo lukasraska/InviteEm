@@ -127,7 +127,7 @@ public class Settings extends YamlConfiguration {
 		inviteMoneyMessage = configFile.getString("locale.InviteMoney",
 				"You have been awarded MONEY for inviting player PLAYER!");
 		registerMoneyMessage = configFile.getString("locale.RegisterMoney",
-				"You have been awarde MONEY for joining our server!");
+				"You have been awarded MONEY for joining our server!");
 		rewardCanceled = configFile.getString("locale.RewardCanceled",
 				"Reward for player PLAYER has been canceled due to REASON!");
 		ipConflict = configFile.getString("locale.IPConflict",
