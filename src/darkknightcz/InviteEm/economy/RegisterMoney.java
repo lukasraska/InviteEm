@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import darkknightcz.InviteEm.InviteEm;
+import darkknightcz.InviteEm.Punishments;
 import darkknightcz.InviteEm.Settings;
 
 public class RegisterMoney implements Runnable {
@@ -42,17 +43,7 @@ public class RegisterMoney implements Runnable {
 			} else {
 
 				/* HANDLING WARNING FOR OFFLINE PLAYER */
-				List<String> warnings = plugin.getDb().getWarnings(
-						player.getName().toLowerCase());
-				if (!warnings.isEmpty()) {
-					for (String warning : warnings) {
-						player.sendMessage(ChatColor.RED
-								+ Settings.youHaveBeenWarned.replaceAll(
-										"REASON", warning));
-					}
-					plugin.getDb().setWarnedPlayer(
-							player.getName().toLowerCase());
-				}
+				Punishments.warn(player);
 
 				/* REWARD */
 				List<String> usernames = plugin.getDb().loadRewards(player);

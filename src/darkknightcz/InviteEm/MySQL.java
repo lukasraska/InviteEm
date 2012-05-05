@@ -305,7 +305,7 @@ public class MySQL {
 		return false;
 	}
 
-	public int getOffset(String nick) throws Exception {
+	public int getOffset(String nick) throws SQLException {
 		Connection con = this.connect();
 		PreparedStatement pst = con
 				.prepareStatement("SELECT invitations_offset FROM `inviteem_users` WHERE nick=?");
@@ -410,7 +410,7 @@ public class MySQL {
 																				// override
 				pst.executeUpdate();
 
-				return ref;
+				return (Settings.banOverride.contains(ref)?null:ref);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -503,17 +503,34 @@ public class MySQL {
 		}
 
 	}
+	
+	public int getWarningsCount(String nick){
+		try{
+			Connection con = this.connect();
+			PreparedStatement pst = con.prepareStatement("SELECT COUNT(id) FROM `inviteem_warnings` WHERE nick = ?");
+			pst.setString(1, nick);
+			pst.execute();
+			ResultSet rs = pst.getResultSet();
+			return rs.getInt(0);
+		}catch(SQLException e){
+			return 0;
+		}
+	}
 
 	public List<String> getWarnings(String nick) {
 		List<String> warns = new ArrayList<String>();
 		try {
 			Connection con = this.connect();
 			PreparedStatement pst = con
-					.prepareStatement("SELECT message FROM `inviteem_warnings` WHERE `received` = 0 AND `for_ops` = 0 AND nick = ?");
+					.prepareStatement("SELECT banned_nick,message FROM `inviteem_warnings` WHERE `received` = 0 AND `for_ops` = 0 AND nick = ?");
 			pst.setString(1, nick);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
-				warns.add(rs.getString("message"));
+				if(rs.getString("message")==null){
+					warns.add(Settings.warnReason.replaceAll("PLAYER", rs.getString("banned_nick")));
+				}else{
+					warns.add(rs.getString("message"));
+				}
 			}
 			return warns;
 		} catch (SQLException e) {

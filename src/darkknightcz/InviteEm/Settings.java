@@ -23,7 +23,31 @@ public class Settings extends YamlConfiguration {
 	
 	public static List<String> banOverride;
 
-	/* LOCALES */
+	
+	/* PUNISHMENTS */
+	public static List<String> BanAction;
+	public static List<String> WarnAction;
+
+	public static Integer reduce;
+	public static Integer TempBanOnWarn;
+	public static Integer BanOnWarn;
+	
+	public static String TempBan;
+	public static String TempBanCommand;
+
+	public static String BanCommand;
+
+	public static double MoneyReduceBanCoefficient;
+	public static double MoneyReduceWarnCoefficient;
+	
+	/* PUNISHMENT LOCALES */
+	public static String youHaveBeenWarned;
+	public static String banReason;
+	public static String warnReason;
+	public static String banOnWarnReason;
+	public static String tempBanOnWarnReason;
+	
+	/* BASIC LOCALES */
 	public static String kickMessage;
 	public static String cannotInvite;
 	public static String alreadyInvited;
@@ -39,7 +63,6 @@ public class Settings extends YamlConfiguration {
 	public static String registerMoneyMessage;
 	public static String inviteMoneyMessage;
 	public static String rewardCanceled;
-	public static String youHaveBeenWarned;
 	public static String IpAddedOnList;
 	public static String IpNotAdded;
 
@@ -110,20 +133,43 @@ public class Settings extends YamlConfiguration {
 		ipConflict = configFile.getString("locale.IPConflict",
 				"same IP address");
 
-		youHaveBeenWarned = configFile.getString("locale.YouHaveBeenWarned",
-				"You have been warned for REASON");
-
+	
 
 		IpAddedOnList = configFile.getString("locale.IpAddedOnList",
 				"IP has been added to the denied list!");
-		IpNotAdded = configFile.getString("locale.IpAddedOnList",
+		IpNotAdded = configFile.getString("locale.IpNotAdded",
 				"IP has NOT been added to the denied list! There is probably same ip in the database!");
 
 		MaxInvitations = configFile.getInt("settings.MaxInvitations");
+		
+		
+		/* PUNISHMENT SYSTEM */
+		BanAction = configFile.getStringList("punishments.invitator.banaction");
+		WarnAction = configFile.getStringList("punishments.invitator.warnaction");	
+		
+		reduce = configFile.getInt("punishments.invitator.onBan.reduce");
+		BanOnWarn = configFile.getInt("punishments.invitator.onBan.BanOnWarn");
+		TempBanOnWarn = configFile.getInt("punishments.invitator.onBan.TempBanOnWarn");
+
+		TempBan = configFile.getString("punishments.invitator.onBan.TempBan","3600");
+		TempBanCommand = configFile.getString("punishments.invitator.onBan.TempBanCommand","ban NICK REASON TIME");
+
+		BanCommand = configFile.getString("punishments.invitator.onBan.BanCommand","ban NICK REASON");
+
+		MoneyReduceBanCoefficient = configFile.getDouble("punishments.invitator.onBan.MoneyReduceBanCoefficient", 1);
+		MoneyReduceWarnCoefficient = configFile.getDouble("punishments.invitator.onBan.MoneyReduceWarnCoefficient", 0.2);
+
+		/* Punishment locale */
+		youHaveBeenWarned = configFile.getString("punishments.locale.YouHaveBeenWarned",
+				"You have been warned for REASON");
+		banReason = configFile.getString("punishments.BanReason","inviting banned player PLAYER");
+		banOnWarnReason = configFile.getString("punishments.BanOnWarnReason","exceeding warnings limit");
+		tempBanOnWarnReason = configFile.getString("punishments.TempBanOnWarn","exceeding warnings limit");
+
+		
 	}
 
 	public static boolean isOnList(String ip) {
 		return deniedIps.contains(ip);
-
 	}
 }

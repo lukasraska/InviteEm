@@ -84,6 +84,9 @@ public class InviteEm extends JavaPlugin {
 			log.info("["+pdfFile.getName()+"] Metrics problem, just ignore");
 		}
 		
+		/* PUNIHMENTS */
+		new Punishments(this);
+		
 	}
 
 	private boolean setupEconomy() {
@@ -111,6 +114,5 @@ public class InviteEm extends JavaPlugin {
 	public void setRewarded(String nick) {
 		db.setRewarded(nick);
 	}
-
 
 }

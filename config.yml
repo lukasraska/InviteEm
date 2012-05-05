@@ -29,7 +29,27 @@ locale:
   InviteMoney: You have been awarded MONEY for inviting player PLAYER!
   RegisterMoney: You have been awarded MONEY for joining our server!
   RewardCanceled: Reward for player PLAYER has been canceled due to REASON!
-  IPConflict: same IP address
-  YouHaveBeenWarned: You have been warned for REASON 
+  IPConflict: same IP address 
   IpAddedOnList: IP has been added to the denied list!
   IpNotAdded: IP has NOT been added to the denied list! There is probably same ip in the database!
+  
+punishments:
+  invitator:
+    banaction: [REDUCE,TEMPBAN] 
+    warnaction: [REDUCE]
+    onBan:
+      Reduce: 1
+      TempBan: 10
+      TempBanCommand: ban NICK REASON TIME
+      BanCommand: ban NICK REASON       
+      BanOnWarn: 3
+      TempBanOnWarn: 2
+      MoneyReduceBanCoefficient: 1
+      MoneyReduceWarnCoefficient: 0.2
+      
+  locale:                    
+    YouHaveBeenWarned: You have been warned for REASON    
+    BanReason: inviting banned player PLAYER    
+    WarnReason: inviting banned player PLAYER
+    BanOnWarnReason: exceeding warnings limit
+    TempBanOnWarnReason: exceeding warnings limit          
